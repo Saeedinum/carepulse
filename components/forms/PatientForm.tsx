@@ -34,10 +34,7 @@ export function PatientForm() {
 			};
 
 			const newUser = await createUser(user);
-			console.log(newUser);
-			// if (newUser) {
-			// 	router.push(`/patients/${newUser.id!}/register`);
-			// }
+			if (newUser) router.push(`/patients/${newUser.$id}/register`);
 		} catch (error) {
 			console.error(error);
 		}
