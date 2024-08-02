@@ -1,8 +1,9 @@
 import type {Metadata} from "next";
-import {Inter} from "next/font/google";
+import {Plus_Jakarta_Sans} from "next/font/google";
 import "./globals.css";
+import {ThemeProvider} from "next-themes";
 
-const inter = Inter({subsets: ["latin"]});
+const fontSans = Plus_Jakarta_Sans({subsets: ["latin"], weight: ["300", "400", "500", "600", "700"], variable: "--font-Sans"});
 
 export const metadata: Metadata = {
 	title: "CarePulse",
@@ -16,7 +17,11 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang='en'>
-			<body>{children}</body>
+			<body>
+				<ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
+					{children}
+				</ThemeProvider>
+			</body>
 		</html>
 	);
 }
