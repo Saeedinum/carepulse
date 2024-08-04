@@ -12,7 +12,7 @@ export const createUser = async (user: CreateUserParams) => {
 			const existingUser = await users.list([Query.equal("email", [user.email])]);
 			return existingUser.users[0];
 		}
-		console.error(error);
+		console.log(error);
 	}
 };
 
@@ -21,13 +21,22 @@ export const getUser = async (userId: string) => {
 		const user = await users.get(userId);
 		return parseStringify(user);
 	} catch (error) {
-		console.error(error);
+		console.log(error);
+	}
+};
+
+export const getPatient = async (userId: string) => {
+	try {
+		const patients = await database.listDocuments(config.DATABASE_ID!, config.PATIENT_COLLECTION_ID!, [Query.equal("userId", [userId])]);
+
+		return parseStringify(patients.documents[0]);
+	} catch (error) {
+		console.log(error);
 	}
 };
 
 export const registerPatient = async ({identificationDocument, ...patientData}: RegisterUserParams) => {
 	try {
-		// const inputFile = InputFile.fromBuffer(identificationDocument[0].get("blobFile") as Blob, identificationDocument[0].get("fileName") as string);
 		const file = await storage.createFile(config.BUCKET_ID as string, ID.unique(), identificationDocument);
 		const patient = await database.createDocument(config.DATABASE_ID as string, config.PATIENT_COLLECTION_ID as string, ID.unique(), {
 			identificationDocumentId: file?.$id ? file.$id : null,
@@ -36,7 +45,6 @@ export const registerPatient = async ({identificationDocument, ...patientData}: 
 				: null,
 			...patientData,
 		});
-		console.log(patient);
 		return parseStringify(patient);
 	} catch (error) {
 		console.log(error);
